@@ -2,8 +2,8 @@ FROM nikolaik/python-nodejs:latest
 
 WORKDIR /app
 COPY . /app
-RUN npm clean-install
-RUN npm run build
+RUN npm --prefix ./frontend clean-install
+RUN npm --prefix ./frontend run build
 RUN pip install -r requirements.txt
 RUN python manage.py migrate
 RUN python manage.py collectstatic --noinput
