@@ -61,7 +61,7 @@ TEMPLATES = [
         'BACKEND':
         'django.template.backends.django.DjangoTemplates',
         'DIRS':
-        [os.path.join(BASE_DIR, 'frontend/build'),
+        [os.path.join(BASE_DIR, 'build'),
          os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS':
         True,
@@ -132,10 +132,10 @@ USE_TZ = True
 # http://whitenoise.evans.io/en/stable/django.html?highlight=django
 STATIC_URL = '/static/'
 # Place static in the same location as webpack build files
-STATIC_ROOT = os.path.join(BASE_DIR, 'frontend', 'build', 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'build', 'static')
 STATICFILES_DIRS = []
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'frontend', 'build', 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'build', 'media')
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
