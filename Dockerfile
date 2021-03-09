@@ -8,4 +8,4 @@ RUN pip install -r requirements.txt
 RUN python manage.py migrate
 RUN python manage.py collectstatic --noinput
 
-CMD uwsgi --module=backend.wsgi --http=0.0.0.0:80
+CMD uwsgi --module=prototype.wsgi --http=0.0.0.0:80
