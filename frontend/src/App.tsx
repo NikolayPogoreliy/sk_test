@@ -1,26 +1,26 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import ApolloClient from 'apollo-boost';
+import { ApolloProvider } from '@apollo/react-hooks';
+import {UserInfo} from "./User";
 
-const App: React.FC = () => {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+const client = new ApolloClient({
+  uri: 'graphql/', // GraphQL Server
+});
+
+const App = () => (
+  <ApolloProvider client={client}>
+    <div style={{
+      backgroundColor: '#00000008',
+      display: 'flex',
+      justifyContent:'center',
+      alignItems:'center',
+      height: '100vh',
+      flexDirection: 'column',
+    }}>
+      <h2>Django + ReactJS + GraphQL app <span role="img" aria-label="rocket">🚀</span></h2>
+      <UserInfo />
     </div>
-  );
-}
+  </ApolloProvider>
+);
 
 export default App;

@@ -39,14 +39,18 @@ INSTALLED_APPS = [
 
     # 3rd party apps
     'rest_framework',
+    'graphene_django',
+    'corsheaders',
 
     'frontend',
+    'api'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',  # Whitenoise Middleware
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -59,12 +63,12 @@ ROOT_URLCONF = 'prototype.urls'
 TEMPLATES = [
     {
         'BACKEND':
-        'django.template.backends.django.DjangoTemplates',
+            'django.template.backends.django.DjangoTemplates',
         'DIRS':
-        [os.path.join(BASE_DIR, 'build'),
-         os.path.join(BASE_DIR, 'templates')],
+            [os.path.join(BASE_DIR, 'build'),
+             os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS':
-        True,
+            True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -88,25 +92,29 @@ DATABASES = {
     }
 }
 
+GRAPHENE = {
+    'SCHEMA': 'api.schema.schema'
+}
+
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME':
-        'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+            'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
         'NAME':
-        'django.contrib.auth.password_validation.MinimumLengthValidator',
+            'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
     {
         'NAME':
-        'django.contrib.auth.password_validation.CommonPasswordValidator',
+            'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
     {
         'NAME':
-        'django.contrib.auth.password_validation.NumericPasswordValidator',
+            'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
 
@@ -122,7 +130,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
