@@ -1,6 +1,6 @@
 import React from 'react';
 import ApolloClient from 'apollo-boost';
-import { ApolloProvider } from '@apollo/react-hooks';
+import {ApolloProvider} from '@apollo/react-hooks';
 import {UserInfo} from "./UserInfo";
 import {CreateUser} from "./UserForm";
 

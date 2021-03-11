@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'corsheaders',
 
     'frontend',
-    'api'
+    'backend.core'
 ]
 
 MIDDLEWARE = [
@@ -97,11 +97,13 @@ DATABASES = {
 }
 
 GRAPHENE = {
-    'SCHEMA': 'api.schema.schema'
+    'SCHEMA': 'backend.core.schema.schema'
 }
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
+
+AUTH_USER_MODEL = 'core.User'
 
 AUTH_PASSWORD_VALIDATORS = [
     {

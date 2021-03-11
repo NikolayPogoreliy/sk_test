@@ -1,7 +1,7 @@
 import graphene
 from graphene_django import DjangoObjectType
 
-from api.models import UserModel
+from backend.core.models import User as UserModel
 
 
 class UserType(DjangoObjectType):
