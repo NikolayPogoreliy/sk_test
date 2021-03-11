@@ -1,6 +1,14 @@
 version: "2"
 
 services:
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
 
   web:
     # the application's web service (container) will use an image based on our Dockerfile
@@ -13,15 +21,7 @@ services:
 #      - ".:/app:rw"
     # the default command to run whenever the container is launched
     command: python manage.py runserver 0.0.0.0:80
-#    links:
-#      - "db:postgres"
-#    env_file: .env-local
-
-#  db:
-#    # the application's web service will use an off-the-shelf image
-#    image: postgres:9.6-alpine
-#    environment:
-#      POSTGRES_DB: "db"
-#      POSTGRES_HOST_AUTH_METHOD: "trust"
-#    volumes:
-#      - ".:/app:rw"
+    depends_on:
+      - db
+volumes:
+  postgres_data:
