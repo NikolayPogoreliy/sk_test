@@ -1,7 +1,7 @@
 import graphene
 from graphene_django import DjangoObjectType
 
-from backend.core.models import User as UserModel, Account
+from backend.core.models import Account, User as UserModel
 
 
 class UserType(DjangoObjectType):
@@ -15,22 +15,20 @@ class AccountType(DjangoObjectType):
 
 
 class CreateAccount(graphene.Mutation):
-    id = graphene.Int()
-    acc_id = graphene.Int()
+    id = graphene.ID()
     name = graphene.String()
 
     class Arguments:
-        acc_id = graphene.Int()
+        id = graphene.Int()
         name = graphene.String()
 
-    def mutate(self, info, acc_id, name):
+    def mutate(self, info, id, name):
         account = Account.objects.create(
-            acc_id=acc_id,
+            id=id,
             name=name
         )
         return CreateAccount(
             id=account.id,
-            acc_id=account.acc_id,
             name=account.name
         )
 
@@ -40,43 +38,22 @@ class CreateUser(graphene.Mutation):
     first_name = graphene.String()
     last_name = graphene.String()
     email = graphene.String()
+    username = graphene.String()
 
     class Arguments:
         first_name = graphene.String()
         last_name = graphene.String()
         email = graphene.String()
+        username = graphene.String()
 
     @classmethod
-    def mutate(cls, root, info, first_name, last_name, email):
-        user = UserModel(first_name=first_name, last_name=last_name, email=email)
+    def mutate(cls, root, info, first_name, last_name, email, username):
+        user = UserModel(first_name=first_name, last_name=last_name, email=email, username=username)
         user.save()
 
         return CreateUser(
             id=user.id,
             first_name=user.first_name,
             last_name=user.last_name,
+            username=user.username
         )
-
-
-class UserQuery(graphene.ObjectType):
-    users = graphene.List(UserType)
-
-    def resolve_users(self, info):
-        return UserModel.objects.all()
-
-
-class AccountQuery(graphene.ObjectType):
-    account = graphene.List(AccountType)
-
-    def resolve_account(self, info, **kwargs):
-        if 'name' in kwargs:
-            return Account.objects.filter(name__contains=kwargs.get('name'))
-        return Account.objects.all()
-
-
-class UserMutation(graphene.ObjectType):
-    create_user = CreateUser.Field()
-
-
-class AccountMutation(graphene.ObjectType):
-    create_user = CreateAccount.Field()

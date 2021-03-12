@@ -1,16 +1,7 @@
 import graphene as graphene
 
-from backend.core.models import User as UserModel, Account
-from backend.core.schema import (UserQuery, UserMutation, AccountQuery, AccountMutation, UserType, AccountType,
-                                 CreateUser, CreateAccount)
-
-
-class Viewer(
-    UserQuery,
-    AccountQuery,
-    graphene.ObjectType
-):
-    pass
+from backend.core.models import Account, User as UserModel
+from backend.core.schema import (AccountType, CreateAccount, CreateUser, UserType)
 
 
 class Query(graphene.ObjectType):

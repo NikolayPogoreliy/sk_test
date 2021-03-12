@@ -17,12 +17,12 @@ services:
     ports:
       - "8000:80"
     # map the host directory to app (which allows us to see and edit files inside the container)
-#    volumes:
-#      - type: bind
-#        source: .
-#        target: /app
-#    volumes:
-#      - ".:/app"
+    #    volumes:
+    #      - type: bind
+    #        source: .
+    #        target: /app
+    volumes:
+      - ".:/app"
     # the default command to run whenever the container is launched
     command: python manage.py runserver 0.0.0.0:80
     depends_on:

@@ -8,5 +8,5 @@ class User(AbstractUser):
 
 
 class Account(models.Model):
-    acc_id = models.PositiveIntegerField()
+    id = models.PositiveIntegerField(primary_key=True)
     name = models.CharField(max_length=300)
