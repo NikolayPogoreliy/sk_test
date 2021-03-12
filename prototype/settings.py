@@ -22,7 +22,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY') or 'development5ecretkey'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DJANGO_DEBUG') == 'True'
+DEBUG = True
+
+# WHITENOISE_AUTOREFRESH = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -34,7 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    # 'whitenoise.runserver_nostatic',  # < As per whitenoise documentation
+    'whitenoise.runserver_nostatic',  # < As per whitenoise documentation
     'django.contrib.staticfiles',
 
     # 3rd party apps
@@ -43,12 +45,13 @@ INSTALLED_APPS = [
     'corsheaders',
 
     'frontend',
-    'backend.core'
+    'backend.core',
+    'backend.report'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # Whitenoise Middleware
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',  # Whitenoise Middleware
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -64,9 +67,11 @@ TEMPLATES = [
     {
         'BACKEND':
             'django.template.backends.django.DjangoTemplates',
-        'DIRS':
-            [os.path.join(BASE_DIR, 'build'),
-             os.path.join(BASE_DIR, 'templates')],
+        'DIRS':[
+            os.path.join(BASE_DIR, 'build'),
+            os.path.join(BASE_DIR, 'frontend', 'public'),
+            os.path.join(BASE_DIR, 'templates')
+        ],
         'APP_DIRS':
             True,
         'OPTIONS': {
@@ -97,7 +102,7 @@ DATABASES = {
 }
 
 GRAPHENE = {
-    'SCHEMA': 'backend.core.schema.schema'
+    'SCHEMA': 'backend.schema.schema'
 }
 
 # Password validation
