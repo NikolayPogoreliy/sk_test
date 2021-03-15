@@ -1,10 +1,10 @@
 import graphene as graphene
 
 from backend.core.schema import (CreateUser, UserQuery)
-from backend.report.schema import ReportQuery
+from backend.report.schema import ReportQuery, Mutation as ReportMutation
 
 
-class Mutation(graphene.ObjectType):
+class Mutation(ReportMutation, graphene.ObjectType):
     create_user = CreateUser.Field()
 
 

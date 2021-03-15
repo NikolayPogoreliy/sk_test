@@ -40,3 +40,34 @@ class ReportQuery:
         if report:
             return report.first()
         return Report.objects.none()
+
+
+class CreateReport(graphene.Mutation):
+    class Arguments:
+        name = graphene.String()
+        accoount_id = graphene.Int()
+        account_name = graphene.String()
+        type = graphene.String()
+        date_from = graphene.types.Date()
+        date_to = graphene.types.Date()
+        data = graphene.JSONString()
+
+    report = graphene.Field(ReportType)
+
+    def mutate(self, info, name, account_id, account_name, type, date_from, date_to, data):
+        report = Report.objects.create(
+            name=name,
+            account_id=account_id,
+            account_name=account_name,
+            type=type,
+            date_from=date_from,
+            date_to=date_to,
+            data=data,
+            owner=info.context.user.id
+        )
+
+        return CreateReport(report=report)
+
+
+class Mutation:
+    create_report = CreateReport.Field()
