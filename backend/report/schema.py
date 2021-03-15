@@ -45,7 +45,7 @@ class ReportQuery:
 class CreateReport(graphene.Mutation):
     class Arguments:
         name = graphene.String()
-        accoount_id = graphene.Int()
+        account_id = graphene.Int()
         account_name = graphene.String()
         type = graphene.String()
         date_from = graphene.types.Date()
@@ -55,6 +55,7 @@ class CreateReport(graphene.Mutation):
     report = graphene.Field(ReportType)
 
     def mutate(self, info, name, account_id, account_name, type, date_from, date_to, data):
+        print(info.context.user)
         report = Report.objects.create(
             name=name,
             account_id=account_id,
@@ -63,11 +64,44 @@ class CreateReport(graphene.Mutation):
             date_from=date_from,
             date_to=date_to,
             data=data,
-            owner=info.context.user.id
+            owner=info.context.user
         )
 
         return CreateReport(report=report)
 
 
+class UpdateReport(graphene.Mutation):
+    class Arguments:
+        id = graphene.ID()
+        name = graphene.String(required=False)
+        date_from = graphene.types.Date(required=False)
+        date_to = graphene.types.Date(required=False)
+        data = graphene.JSONString(required=False)
+        state = graphene.Int(required=False)
+
+    report = graphene.Field(ReportType)
+
+    def mutate(self, info, id, **kwargs):
+        report = Report.objects.filter(id=id).update(
+            **kwargs
+        )
+        return UpdateReport(report=report.first())
+
+
+class DeleteReport(graphene.Mutation):
+    class Arguments:
+        id = graphene.ID()
+
+    report = graphene.Field(ReportType)
+
+    def mutate(self, info, id):
+        report = Report.objects.filter(id=id)
+        report.delete()
+
+        return DeleteReport(report=report.first())
+
+
 class Mutation:
     create_report = CreateReport.Field()
+    update_report = UpdateReport.Field()
+    delete_report = DeleteReport.Field()

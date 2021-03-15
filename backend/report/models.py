@@ -17,5 +17,5 @@ class Report(models.Model):
     type = models.CharField(max_length=20)
     date_from = models.DateField()
     date_to = models.DateField()
-    data = models.JSONField(default=dict)
+    data = models.JSONField(default=dict, null=True)
     state = models.PositiveSmallIntegerField(choices=ReportStateChoices.choices, default=ReportStateChoices.ACTIVE)
