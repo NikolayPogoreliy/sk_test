@@ -11,11 +11,6 @@ class ReportType(DjangoObjectType):
         model = Report
 
 
-# class ReportConnection(graphene.relay.Connection):
-#     class Meta:
-#         node = ReportType
-
-
 class ReportQuery:
     reports = graphene.List(ReportType)
     report = graphene.Field(ReportType, id=graphene.ID())
