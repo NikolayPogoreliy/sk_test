@@ -10,7 +10,8 @@ class ReportStateChoices(models.IntegerChoices):
 class Report(models.Model):
     owner = models.ForeignKey('core.User', on_delete=models.PROTECT, related_name='user_reports')
     name = models.CharField(max_length=300)
-    account = models.ForeignKey('core.Account', on_delete=models.CASCADE, related_name='account_reports')
+    account_id = models.PositiveIntegerField()
+    account_name = models.CharField(max_length=300)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     type = models.CharField(max_length=20)

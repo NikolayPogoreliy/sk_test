@@ -1,36 +1,12 @@
 import graphene
 from graphene_django import DjangoObjectType
 
-from backend.core.models import Account, User as UserModel
+from backend.core.models import User as UserModel
 
 
 class UserType(DjangoObjectType):
     class Meta:
         model = UserModel
-
-
-class AccountType(DjangoObjectType):
-    class Meta:
-        model = Account
-
-
-class CreateAccount(graphene.Mutation):
-    id = graphene.ID()
-    name = graphene.String()
-
-    class Arguments:
-        id = graphene.Int()
-        name = graphene.String()
-
-    def mutate(self, info, id, name):
-        account = Account.objects.create(
-            id=id,
-            name=name
-        )
-        return CreateAccount(
-            id=account.id,
-            name=account.name
-        )
 
 
 class CreateUser(graphene.Mutation):
