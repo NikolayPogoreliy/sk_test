@@ -1,4 +1,4 @@
-import graphene
+import graphene as graphene
 from graphene_django import DjangoObjectType
 
 from backend.core.models import User as UserModel
@@ -33,3 +33,14 @@ class CreateUser(graphene.Mutation):
             last_name=user.last_name,
             username=user.username
         )
+
+
+class UserQuery:
+    users = graphene.List(UserType)
+    user = graphene.Field(UserType, user_id=graphene.ID())
+
+    def resolve_users(self, info, **kwargs):
+        return UserModel.objects.all()
+
+    def resolve_user(self, info, user_id):
+        return UserModel.objects.get(id=user_id)
