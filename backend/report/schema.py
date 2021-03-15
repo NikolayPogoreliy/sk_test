@@ -9,13 +9,11 @@ from backend.report.models import Report
 class ReportType(DjangoObjectType):
     class Meta:
         model = Report
-        interface = [graphene.relay.Node]
-        fields = '__all__'
 
 
-class ReportConnection(graphene.relay.Connection):
-    class Meta:
-        node = ReportType
+# class ReportConnection(graphene.relay.Connection):
+#     class Meta:
+#         node = ReportType
 
 
 class ReportQuery:
