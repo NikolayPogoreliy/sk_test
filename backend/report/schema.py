@@ -11,14 +11,17 @@ class ReportType(DjangoObjectType):
         model = Report
 
 
+class FilterType(graphene.ObjectType):
+    name = graphene.String()
+    account_id = graphene.Int()
+
+
 class ReportQuery:
-    reports = graphene.List(ReportType)
+    reports = graphene.Field(ReportType, filters=graphene.String())
     report = graphene.Field(ReportType, id=graphene.ID())
 
     def resolve_reports(self, info, **kwargs):
         qs = Report.objects.all()
-        if 'filter' in kwargs:
-            qs = qs.filter(**kwargs['filter'])
         if 'limit' in kwargs and 'page' in kwargs:
             limit = int(kwargs.get('limit', 15))
             if limit <= 0:
