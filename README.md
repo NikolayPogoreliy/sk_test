@@ -12,6 +12,8 @@
 
 `docker-compose up`
 
+`docker-compose run web python manage.py migrate`
+
 ##### Load fixtures 
 
 `docker-compose run web python manage.py loaddata fixtures/fixture.json`
