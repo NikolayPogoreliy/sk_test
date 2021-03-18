@@ -46,6 +46,7 @@ INSTALLED_APPS = [
 
     'frontend',
     'backend.core',
+    'backend.template',
     'backend.report'
 ]
 
