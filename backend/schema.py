@@ -1,11 +1,12 @@
 import graphene as graphene
 
 from backend.core.schema import (CreateUser, UserQuery)
-from backend.report.schema import ReportQuery, Mutation as ReportMutation
-from backend.template.schema import DimensionQuery
+from backend.report.schema import Mutation as ReportMutation, ReportQuery
+from backend.template.schema.mutations import ChartMutation
+from backend.template.schema.queries import DimensionQuery
 
 
-class Mutation(ReportMutation, graphene.ObjectType):
+class Mutation(ChartMutation, ReportMutation, graphene.ObjectType):
     create_user = CreateUser.Field()
 
 
