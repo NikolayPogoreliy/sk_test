@@ -4,6 +4,7 @@ from backend.core.schema import (CreateUser, UserQuery)
 from backend.report.schema import Mutation as ReportMutation, ReportQuery
 from backend.template.schema.mutations import ChartMutation, DimensionMutation, MetricMutation, PivotMutation
 from backend.template.schema.queries import ChartQuery, DimensionQuery, MetricQuery, PivotQuery
+from backend.vms.schema.queries import AccountsQuery
 
 
 class Mutation(
@@ -23,6 +24,7 @@ class Query(
     MetricQuery,
     PivotQuery,
     ChartQuery,
+    AccountsQuery,
     graphene.ObjectType):
     pass
 
