@@ -9,19 +9,19 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RenameField(
-            model_name='chart',
-            old_name='dimension',
-            new_name='dimensions',
-        ),
+        # migrations.RenameField(
+        #     model_name='chart',
+        #     old_name='dimension',
+        #     new_name='dimensions',
+        # ),
         migrations.RenameField(
             model_name='chart',
             old_name='pivot',
             new_name='pivots',
         ),
-        migrations.RenameField(
-            model_name='pivot',
-            old_name='dimension',
-            new_name='dimensions',
-        ),
+        # migrations.RenameField(
+        #     model_name='pivot',
+        #     old_name='dimension',
+        #     new_name='dimensions',
+        # ),
     ]
