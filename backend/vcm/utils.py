@@ -42,7 +42,7 @@ def get_pivot_request(pivots: QuerySet[Pivot] = None) -> dict:
     pivot_list = [
         {
             "dimensions": [
-                {'name': dim.name} for dim in pivot.dimension.all()
+                {'name': dim.name} for dim in pivot.dimensions.all()
             ],
             "metrics": [
                 {"expression": metr.name} for metr in pivot.metrics.all()
@@ -144,7 +144,7 @@ def get_analytics(target_id):
                 'endDate': 'today'
             }],
             'metrics': [{'expression': metric.name} for metric in chart.metrics.all()],
-            'dimensions': [{'name': dimension.name} for dimension in chart.dimension.all()]
+            'dimensions': [{'name': dimension.name} for dimension in chart.dimensions.all()]
         }
         pivots = get_pivot_request(chart.pivot.all())
         if pivots:
