@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'frontend',
     'backend.core',
     'backend.template',
-    'backend.report'
+    'backend.report',
+    'backend.vms'
 ]
 
 MIDDLEWARE = [
