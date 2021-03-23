@@ -38,3 +38,11 @@ class Dimension(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Template(models.Model):
+    name = models.CharField(max_length=300, unique=True, blank=False)
+    charts = models.ManyToManyField(Chart, related_name='template_for_chart')
+
+    def __str__(self):
+        return self.name
