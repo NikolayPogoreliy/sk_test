@@ -85,9 +85,11 @@ class UpdateReport(graphene.Mutation):
     report = graphene.Field(ReportType)
 
     def mutate(self, info, id, **kwargs):
-        report = Report.objects.filter(id=id).update(
-            **kwargs
-        )
+        report = Report.objects.filter(id=id)
+        if report.exists():
+            report.update(
+                **kwargs
+            )
         return UpdateReport(report=report.first())
 
 

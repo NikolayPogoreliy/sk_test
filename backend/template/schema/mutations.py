@@ -96,6 +96,9 @@ class UpdatePivot(graphene.Mutation):
     def mutate(self, info, id, **kwargs):
         pivot = Pivot.objects.filter(id=id)
         if pivot.exists():
+            name = kwargs.pop('name', None)
+            if name:
+                pivot.update(name=name)
             for k in kwargs:
                 field = getattr(pivot.first(), k)
                 field.set(kwargs.get(k))
@@ -142,9 +145,8 @@ class UpdateDimension(graphene.Mutation):
     def mutate(self, info, id, **kwargs):
         dimension = Dimension.objects.filter(id=id)
         if dimension.exists():
-            for k in kwargs:
-                field = getattr(dimension.first(), k)
-                field.set(kwargs.get(k))
+            if 'name' in kwargs:
+                dimension.update(name=kwargs.get('name'))
         return UpdateDimension(dimension=dimension.first())
 
 
@@ -187,10 +189,8 @@ class UpdateMetric(graphene.Mutation):
 
     def mutate(self, info, id, **kwargs):
         metric = Metric.objects.filter(id=id)
-        if metric.exists():
-            for k in kwargs:
-                field = getattr(metric.first(), k)
-                field.set(kwargs.get(k))
+        if metric.exists() and 'name' in kwargs:
+            metric.update(name=kwargs.get('name'))
         return UpdateMetric(metric=metric.first())
 
 
