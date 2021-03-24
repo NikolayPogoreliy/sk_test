@@ -1,7 +1,7 @@
 from graphene import relay
 from graphene_django import DjangoObjectType
 
-from backend.template.models import Chart, Dimension, Metric, Pivot
+from backend.template.models import Chart, Dimension, Metric, Pivot, Template
 
 
 class MetricType(DjangoObjectType):
@@ -32,6 +32,13 @@ class ChartType(DjangoObjectType):
         fields = '__all__'
 
 
+class TemplateType(DjangoObjectType):
+    class Meta:
+        model = Template
+        interface = (relay.Node,)
+        fields = '__all__'
+
+
 class DimensionConnection(relay.Connection):
     class Meta:
         node = DimensionType
@@ -50,3 +57,8 @@ class PivotConnection(relay.Connection):
 class ChartConnection(relay.Connection):
     class Meta:
         node = ChartType
+
+
+class TemplateConnection(relay.Connection):
+    class Meta:
+        node = TemplateType

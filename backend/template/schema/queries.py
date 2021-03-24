@@ -1,9 +1,10 @@
 import graphene
 from graphene import relay
 
-from backend.template.models import Chart, Dimension, Metric, Pivot
+from backend.template.models import Chart, Dimension, Metric, Pivot, Template
 from backend.template.schema.types import (ChartConnection, ChartType, DimensionConnection, DimensionType,
-                                           MetricConnection, MetricType, PivotConnection, PivotType)
+                                           MetricConnection, MetricType, PivotConnection, PivotType, TemplateConnection,
+                                           TemplateType)
 
 
 class DimensionQuery:
@@ -48,3 +49,14 @@ class ChartQuery:
 
     def resolve_chart(root, info, id, **kwargs):
         return Chart.objects.filter(pk=id).first()
+
+
+class TemplateQuery:
+    templates = relay.ConnectionField(TemplateConnection)
+    template = graphene.Field(TemplateType, id=graphene.ID())
+
+    def resolve_templates(root, info, **kwargs):
+        return Template.objects.all()
+
+    def resolve_template(root, info, id, **kwargs):
+        return Template.objects.filter(pk=id).first()

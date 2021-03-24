@@ -4,6 +4,7 @@ import graphene
 from graphene_django import DjangoObjectType
 
 from backend.report.models import Report
+from backend.vms.utils import get_analytics
 
 
 class ReportType(DjangoObjectType):
@@ -53,12 +54,12 @@ class CreateReport(graphene.Mutation):
         type = graphene.String()
         date_from = graphene.types.Date()
         date_to = graphene.types.Date()
-        data = graphene.JSONString()
+        template_id = graphene.ID()
 
     report = graphene.Field(ReportType)
 
-    def mutate(self, info, name, account_id, account_name, type, date_from, date_to, data):
-        print(info.context.user)
+    def mutate(self, info, name, account_id, account_name, type, date_from, date_to, template_id):
+        data = get_analytics(template_id, date_from, date_to)
         report = Report.objects.create(
             name=name,
             account_id=account_id,
