@@ -1,7 +1,7 @@
-from math import ceil
-
 import graphene
+from graphene import relay
 from graphene_django import DjangoObjectType
+from graphene_django.filter import DjangoFilterConnectionField
 
 from backend.report.models import Report
 from backend.vms.utils import get_analytics
@@ -10,6 +10,13 @@ from backend.vms.utils import get_analytics
 class ReportType(DjangoObjectType):
     class Meta:
         model = Report
+        interfaces = (relay.Node,)
+        fields = '__all__'
+        filter_fields = {
+            'name': ['icontains'],
+            'account_id': ['exact'],
+            'account_name': ['icontains']
+        }
 
 
 class FilterType(graphene.ObjectType):
@@ -18,26 +25,26 @@ class FilterType(graphene.ObjectType):
 
 
 class ReportQuery:
-    reports = graphene.Field(ReportType, filters=graphene.String())
+    reports = DjangoFilterConnectionField(ReportType)
     report = graphene.Field(ReportType, id=graphene.ID())
 
-    def resolve_reports(self, info, **kwargs):
-        qs = Report.objects.all()
-        if 'limit' in kwargs and 'page' in kwargs:
-            limit = int(kwargs.get('limit', 15))
-            if limit <= 0:
-                limit = 15
-            total_pages = int(ceil(qs.count() / limit))
-            page = int(kwargs.get('page', 1))
-            if page <= 0:
-                page = 1
-            if page > total_pages:
-                page = total_pages
-
-            from_row = limit * (page - 1)
-            to_row = from_row + limit + 1
-            qs = qs[from_row: to_row]
-        return qs
+    # def resolve_reports(self, info, **kwargs):
+    #     return Report.objects.all()
+    #     if 'limit' in kwargs and 'page' in kwargs:
+    #         limit = int(kwargs.get('limit', 15))
+    #         if limit <= 0:
+    #             limit = 15
+    #         total_pages = int(ceil(qs.count() / limit))
+    #         page = int(kwargs.get('page', 1))
+    #         if page <= 0:
+    #             page = 1
+    #         if page > total_pages:
+    #             page = total_pages
+    #
+    #         from_row = limit * (page - 1)
+    #         to_row = from_row + limit + 1
+    #         qs = qs[from_row: to_row]
+    #     return qs
 
     def resolve_report(self, info, id):
         report = Report.objects.filter(id=id)

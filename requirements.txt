@@ -9,3 +9,4 @@ dj-database-url==0.5.0
 google-api-python-client
 oauth2client
 matplotlib
+django-filter
