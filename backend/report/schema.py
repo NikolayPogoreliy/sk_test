@@ -27,7 +27,7 @@ class FilterType(graphene.ObjectType):
 
 class ReportQuery:
     reports = DjangoFilterConnectionField(ReportType)
-    report = graphene.Field(ReportType, id=graphene.ID())
+    report = graphene.Field(ReportType, id=graphene.String())
 
     # def resolve_reports(self, info, **kwargs):
     #     return Report.objects.all()
@@ -48,7 +48,7 @@ class ReportQuery:
     #     return qs
 
     def resolve_report(self, info, id):
-        report = Report.objects.filter(id=id)
+        report = Report.objects.filter(id=from_global_id(id)[1])
         if report:
             return report.first()
         return Report.objects.none()
