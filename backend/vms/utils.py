@@ -138,17 +138,17 @@ def get_analytics(template_id, date_from, date_to):
         chart_dict = {
             'viewId': target.ga_view_id,
             'dateRanges': [{
-                'startDate': date_from,
-                'endDate': date_to
+                'startDate': date_from.isoformat(),
+                'endDate': date_to.isoformat()
             }],
             'metrics': [{'expression': metric.name} for metric in chart.metrics.all()],
             'dimensions': [{'name': dimension.name} for dimension in chart.dimensions.all()]
         }
-        pivots = get_pivot_request(chart.pivot.all())
+        pivots = get_pivot_request(chart.pivots.all())
         if pivots:
             chart_dict.update(pivots)
-        if target.filter:
-            chart_dict.update({'filtersExpression': target.filter})
+        if target.filter_expression:
+            chart_dict.update({'filtersExpression': target.filter_expression})
         report_querysets.append(chart_dict)
         chart_names.append(chart.name)
     response = get_report(analytics, report_querysets)

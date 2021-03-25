@@ -1,10 +1,10 @@
 import graphene
 from graphene import relay
+from graphene_django.filter import DjangoFilterConnectionField
 
-from backend.template.models import Chart, Dimension, Metric, Pivot, Template
+from backend.template.models import Chart, Dimension, Metric, Pivot
 from backend.template.schema.types import (ChartConnection, ChartType, DimensionConnection, DimensionType,
-                                           MetricConnection, MetricType, PivotConnection, PivotType, TemplateConnection,
-                                           TemplateType)
+                                           MetricConnection, MetricType, PivotConnection, PivotType, TemplateNode)
 
 
 class DimensionQuery:
@@ -52,11 +52,11 @@ class ChartQuery:
 
 
 class TemplateQuery:
-    templates = relay.ConnectionField(TemplateConnection)
-    template = graphene.Field(TemplateType, id=graphene.ID())
+    templates = DjangoFilterConnectionField(TemplateNode)
+    template = relay.node.Field(TemplateNode)
 
-    def resolve_templates(root, info, **kwargs):
-        return Template.objects.all()
+    # def resolve_templates(root, info, **kwargs):
+    #     return Template.objects.all()
 
-    def resolve_template(root, info, id, **kwargs):
-        return Template.objects.filter(pk=id).first()
+    # def resolve_template(root, info, id, **kwargs):
+    #     return Template.objects.filter(pk=id).first()

@@ -2,8 +2,9 @@ import graphene as graphene
 
 from backend.core.schema import (CreateUser, UserQuery)
 from backend.report.schema import Mutation as ReportMutation, ReportQuery
-from backend.template.schema.mutations import ChartMutation, DimensionMutation, MetricMutation, PivotMutation
-from backend.template.schema.queries import ChartQuery, DimensionQuery, MetricQuery, PivotQuery
+from backend.template.schema.mutations import ChartMutation, DimensionMutation, MetricMutation, PivotMutation, \
+    TemplateMutation
+from backend.template.schema.queries import ChartQuery, DimensionQuery, MetricQuery, PivotQuery, TemplateQuery
 from backend.vms.schema.queries import AccountQuery, BookingQuery, VacancyQuery
 
 
@@ -13,6 +14,7 @@ class Mutation(
     MetricMutation,
     DimensionMutation,
     ReportMutation,
+    TemplateMutation,
     graphene.ObjectType):
     create_user = CreateUser.Field()
 
@@ -27,6 +29,7 @@ class Query(
     AccountQuery,
     BookingQuery,
     VacancyQuery,
+    TemplateQuery,
     graphene.ObjectType):
     pass
 

@@ -43,7 +43,7 @@ class Dimension(models.Model):
 class Template(models.Model):
     name = models.CharField(max_length=200)
     charts = models.ManyToManyField(to='Chart', related_name='template_for_chart')
-    filter = models.CharField(max_length=300, blank=True)
+    filter_expression = models.CharField(max_length=300, blank=True, null=True)
     ga_view_id = models.CharField(max_length=100)
 
     def __str__(self):

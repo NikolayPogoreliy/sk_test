@@ -1,7 +1,8 @@
 import graphene
+from graphql_relay import from_global_id
 
-from backend.template.models import Chart, Dimension, Metric, Pivot
-from backend.template.schema.types import ChartType, DimensionType, MetricType, PivotType
+from backend.template.models import Chart, Dimension, Metric, Pivot, Template
+from backend.template.schema.types import ChartType, DimensionType, MetricType, PivotType, TemplateType
 
 
 class CreateChart(graphene.Mutation):
@@ -56,7 +57,7 @@ class DeleteChart(graphene.Mutation):
         chart = Chart.objects.filter(id=id)
         chart.delete()
 
-        return DeleteChart(report=chart.first())
+        return DeleteChart(chart=chart.first())
 
 
 class ChartMutation:
@@ -115,7 +116,7 @@ class DeletePivot(graphene.Mutation):
         pivot = Pivot.objects.filter(id=id)
         pivot.delete()
 
-        return DeletePivot(report=pivot.first())
+        return DeletePivot(pivot=pivot.first())
 
 
 class PivotMutation:
@@ -130,7 +131,7 @@ class CreateDimension(graphene.Mutation):
 
     dimension = graphene.Field(DimensionType)
 
-    def mutate(self, info, name, metrics: list, dimensions: list, max_group_count: int, start_group: int):
+    def mutate(self, info, name):
         dimension = Dimension.objects.create(name=name)
         return CreateDimension(dimension=dimension)
 
@@ -175,7 +176,7 @@ class CreateMetric(graphene.Mutation):
 
     metric = graphene.Field(MetricType)
 
-    def mutate(self, info, name, metrics: list, dimensions: list, max_group_count: int, start_group: int):
+    def mutate(self, info, name):
         metric = Metric.objects.create(name=name)
         return CreateMetric(metric=metric)
 
@@ -211,3 +212,59 @@ class MetricMutation:
     create_metric = CreateMetric.Field()
     delete_metric = DeleteMetric.Field()
     update_metric = UpdateMetric.Field()
+
+
+class CreateTemplate(graphene.Mutation):
+    class Arguments:
+        name = graphene.String()
+        charts = graphene.List(graphene.ID)
+        ga_view_id = graphene.String()
+        filter_expression = graphene.String()
+
+    template = graphene.Field(TemplateType)
+
+    def mutate(self, info, name, charts: list, ga_view_id: int, filter_expression: str = None):
+        template = Template.objects.create(name=name, ga_view_id=ga_view_id, filter_expression=filter_expression)
+        template.charts.set(charts)
+        return CreateTemplate(template=template)
+
+
+class UpdateTemplate(graphene.Mutation):
+    class Arguments:
+        id = graphene.String()
+        name = graphene.String()
+        charts = graphene.List(graphene.ID)
+        ga_view_id = graphene.String()
+        filter_expression = graphene.String()
+
+    template = graphene.Field(TemplateType)
+
+    def mutate(self, info, id, **kwargs):
+        charts = kwargs.pop('charts', None)
+
+        template = Template.objects.filter(id=from_global_id(id)[1])
+        if template.exists():
+            template.update(**kwargs)
+
+            if charts:
+                template.charts.set(charts)
+        return UpdateTemplate(template=template.first())
+
+
+class DeleteTemplate(graphene.Mutation):
+    class Arguments:
+        id = graphene.String()
+
+    template = graphene.Field(ChartType)
+
+    def mutate(self, info, id):
+        chart = Template.objects.filter(id=from_global_id(id)[1])
+        chart.delete()
+
+        return DeleteChart(template=chart.first())
+
+
+class TemplateMutation:
+    create_template = CreateTemplate.Field()
+    delete_template = DeleteTemplate.Field()
+    update_template = UpdateTemplate.Field()

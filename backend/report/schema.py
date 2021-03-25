@@ -2,6 +2,7 @@ import graphene
 from graphene import relay
 from graphene_django import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
+from graphql_relay import from_global_id
 
 from backend.report.models import Report
 from backend.vms.utils import get_analytics
@@ -61,12 +62,12 @@ class CreateReport(graphene.Mutation):
         type = graphene.String()
         date_from = graphene.types.Date()
         date_to = graphene.types.Date()
-        template_id = graphene.ID()
+        template_id = graphene.String()
 
     report = graphene.Field(ReportType)
 
     def mutate(self, info, name, account_id, account_name, type, date_from, date_to, template_id):
-        data = get_analytics(template_id, date_from, date_to)
+        data = get_analytics(from_global_id(template_id)[1], date_from, date_to)
         report = Report.objects.create(
             name=name,
             account_id=account_id,
@@ -83,7 +84,7 @@ class CreateReport(graphene.Mutation):
 
 class UpdateReport(graphene.Mutation):
     class Arguments:
-        id = graphene.ID()
+        id = graphene.String()
         name = graphene.String(required=False)
         date_from = graphene.types.Date(required=False)
         date_to = graphene.types.Date(required=False)
@@ -93,7 +94,7 @@ class UpdateReport(graphene.Mutation):
     report = graphene.Field(ReportType)
 
     def mutate(self, info, id, **kwargs):
-        report = Report.objects.filter(id=id)
+        report = Report.objects.filter(id=from_global_id(id)[1])
         if report.exists():
             report.update(
                 **kwargs
@@ -103,12 +104,12 @@ class UpdateReport(graphene.Mutation):
 
 class DeleteReport(graphene.Mutation):
     class Arguments:
-        id = graphene.ID()
+        id = graphene.String()
 
     report = graphene.Field(ReportType)
 
     def mutate(self, info, id):
-        report = Report.objects.filter(id=id)
+        report = Report.objects.filter(id=from_global_id(id)[1])
         report.delete()
 
         return DeleteReport(report=report.first())

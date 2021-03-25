@@ -35,8 +35,16 @@ class ChartType(DjangoObjectType):
 class TemplateType(DjangoObjectType):
     class Meta:
         model = Template
-        interface = (relay.Node,)
+
+
+class TemplateNode(DjangoObjectType):
+    class Meta:
+        model = Template
+        interfaces = (relay.Node,)
         fields = '__all__'
+        filter_fields = {
+            'name': ['icontains']
+        }
 
 
 class DimensionConnection(relay.Connection):
@@ -61,4 +69,4 @@ class ChartConnection(relay.Connection):
 
 class TemplateConnection(relay.Connection):
     class Meta:
-        node = TemplateType
+        node = TemplateNode
