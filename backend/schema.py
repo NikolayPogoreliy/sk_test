@@ -1,7 +1,8 @@
 import graphene as graphene
 
 from backend.core.schema import (CreateUser, UserQuery)
-from backend.report.schema import Mutation as ReportMutation, ReportQuery
+from backend.report.schema.mutations import Mutation as ReportMutation
+from backend.report.schema.queries import ReportQuery
 from backend.template.schema.mutations import ChartMutation, DimensionMutation, MetricMutation, PivotMutation, \
     TemplateMutation
 from backend.template.schema.queries import ChartQuery, DimensionQuery, MetricQuery, PivotQuery, TemplateQuery

@@ -162,3 +162,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'build', 'media')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 KEY_FILE_LOCATION = os.path.join(BASE_DIR, "backend/ga/service_secret.json")
+
+VMS_API_BASE_URL = "https://staging.stellen-anzeiger.ch/admin/api"
+VMS_API_LOGIN = 'analytics'
+VMS_API_PASSWORD = 'analytics'

@@ -6,6 +6,7 @@ from backend.template.schema.types import ChartType, DimensionType, MetricType, 
 
 
 class CreateChart(graphene.Mutation):
+    """ Mutation for chart creation """
     class Arguments:
         name = graphene.String()
         metrics = graphene.List(graphene.ID)
@@ -24,6 +25,10 @@ class CreateChart(graphene.Mutation):
 
 
 class UpdateChart(graphene.Mutation):
+    """ Mutation for chart updating
+    can change name, add pivots, metrics and dimensions
+    """
+
     class Arguments:
         id = graphene.ID()
         name = graphene.String()
@@ -48,6 +53,7 @@ class UpdateChart(graphene.Mutation):
 
 
 class DeleteChart(graphene.Mutation):
+    """ Delete chart """
     class Arguments:
         id = graphene.ID()
 
@@ -67,6 +73,7 @@ class ChartMutation:
 
 
 class CreatePivot(graphene.Mutation):
+    """ Create pivot """
     class Arguments:
         name = graphene.String()
         metrics = graphene.List(graphene.ID)
@@ -84,6 +91,7 @@ class CreatePivot(graphene.Mutation):
 
 
 class UpdatePivot(graphene.Mutation):
+    """ Update pivot """
     class Arguments:
         id = graphene.ID()
         name = graphene.String()
@@ -107,6 +115,7 @@ class UpdatePivot(graphene.Mutation):
 
 
 class DeletePivot(graphene.Mutation):
+    """ Delete Pivot"""
     class Arguments:
         id = graphene.ID()
 
@@ -126,6 +135,7 @@ class PivotMutation:
 
 
 class CreateDimension(graphene.Mutation):
+    """ Add GA dimension """
     class Arguments:
         name = graphene.String()
 
@@ -137,6 +147,7 @@ class CreateDimension(graphene.Mutation):
 
 
 class UpdateDimension(graphene.Mutation):
+    """ Update GA dimension name """
     class Arguments:
         id = graphene.ID()
         name = graphene.String()
@@ -152,6 +163,7 @@ class UpdateDimension(graphene.Mutation):
 
 
 class DeleteDimension(graphene.Mutation):
+    """ Delete GA dimension"""
     class Arguments:
         id = graphene.ID()
 
@@ -171,6 +183,7 @@ class DimensionMutation:
 
 
 class CreateMetric(graphene.Mutation):
+    """ Create GA metric """
     class Arguments:
         name = graphene.String()
 
@@ -182,6 +195,7 @@ class CreateMetric(graphene.Mutation):
 
 
 class UpdateMetric(graphene.Mutation):
+    """ Update GA metric name """
     class Arguments:
         id = graphene.ID()
         name = graphene.String()
@@ -196,6 +210,7 @@ class UpdateMetric(graphene.Mutation):
 
 
 class DeleteMetric(graphene.Mutation):
+    """ Delete GA metric """
     class Arguments:
         id = graphene.ID()
 
@@ -215,6 +230,14 @@ class MetricMutation:
 
 
 class CreateTemplate(graphene.Mutation):
+    """ Create template:
+    contains:
+        name
+        GA viewId
+        charts
+        filter expression (common for all charts in template)
+    """
+
     class Arguments:
         name = graphene.String()
         charts = graphene.List(graphene.ID)
@@ -230,6 +253,14 @@ class CreateTemplate(graphene.Mutation):
 
 
 class UpdateTemplate(graphene.Mutation):
+    """
+        Update template
+            name
+            charts
+            GA viewId
+            filter expression
+    """
+
     class Arguments:
         id = graphene.String()
         name = graphene.String()
@@ -252,6 +283,7 @@ class UpdateTemplate(graphene.Mutation):
 
 
 class DeleteTemplate(graphene.Mutation):
+    """ Delete template """
     class Arguments:
         id = graphene.String()
 

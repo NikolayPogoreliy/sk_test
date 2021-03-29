@@ -1,10 +1,12 @@
 import graphene
 import requests
+from django.conf import settings
 from graphene.types import generic
 from requests.auth import HTTPBasicAuth
 
 
 class AccountQuery:
+    """ Get accounts list form VMS-api """
     vms_accounts = generic.GenericScalar(
         start=graphene.Int(required=True, default_value=0),
         number=graphene.Int(required=True, default_value=10),
@@ -16,13 +18,13 @@ class AccountQuery:
 
     def resolve_vms_accounts(
             self, info,
-            start=0,
-            number=10,
-            order_predicate=None,
-            order_direction=None,
-            query=None,
-            user_id=None
-    ):
+            start: int = 0,
+            number: int = 10,
+            order_predicate: str = None,
+            order_direction: str = None,
+            query: str = None,
+            user_id: str = None
+    ) -> dict:
         data = dict(start=start, number=number)
         if order_predicate:
             data['oderPredicate'] = order_predicate
@@ -33,14 +35,15 @@ class AccountQuery:
         if user_id:
             data['userId'] = user_id
         response = requests.post(
-            url="https://staging.stellen-anzeiger.ch/admin/api/account/search",
-            auth=HTTPBasicAuth('analytics', 'analytics'),
+            url=f"{settings.VMS_API_BASE_URL}/account/search",
+            auth=HTTPBasicAuth(settings.VMS_API_LOGIN, settings.VMS_API_PASSWORD),
             json=data
         ).json()
         return response.get('data', [])
 
 
 class BookingQuery:
+    """ Get bookings list from VMS-api """
     vms_bookings = generic.GenericScalar(
         start=graphene.Int(required=True, default_value=0),
         number=graphene.Int(required=True, default_value=10),
@@ -69,14 +72,15 @@ class BookingQuery:
         if account_id:
             data['accountId'] = account_id
         response = requests.post(
-            url="https://staging.stellen-anzeiger.ch/admin/api/booking/search",
-            auth=HTTPBasicAuth('analytics', 'analytics'),
+            url=f"{settings.VMS_API_BASE_URL}/booking/search",
+            auth=HTTPBasicAuth(settings.VMS_API_LOGIN, settings.VMS_API_PASSWORD),
             json=data
         ).json()
         return response.get('data', [])
 
 
 class VacancyQuery:
+    """ Get vacancies list from VMS-api"""
     vms_vacancies = generic.GenericScalar(
         start=graphene.Int(required=True, default_value=0),
         number=graphene.Int(required=True, default_value=10),
@@ -109,8 +113,8 @@ class VacancyQuery:
         if booking_id:
             data['bookingId'] = booking_id
         response = requests.post(
-            url="https://staging.stellen-anzeiger.ch/admin/api/vacancy/search",
-            auth=HTTPBasicAuth('analytics', 'analytics'),
+            url=f"{settings.VMS_API_BASE_URL}/vacancy/search",
+            auth=HTTPBasicAuth(settings.VMS_API_LOGIN, settings.VMS_API_PASSWORD),
             json=data
         ).json()
         return response.get('data', [])
