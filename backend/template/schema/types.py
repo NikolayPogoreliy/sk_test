@@ -1,5 +1,8 @@
 from graphene import relay
 from graphene_django import DjangoObjectType
+from graphene_django_extras import (
+    DjangoListObjectType, LimitOffsetGraphqlPagination,
+)
 
 from backend.template.models import Chart, Dimension, Metric, Pivot, Template
 
@@ -43,8 +46,17 @@ class TemplateNode(DjangoObjectType):
         interfaces = (relay.Node,)
         fields = '__all__'
         filter_fields = {
-            'name': ['icontains']
-        }
+            'name': ['icontains']}
+
+
+class TemplateListType(DjangoListObjectType):
+    class Meta:
+        model = Template
+        description = 'All reports'
+        pagination = LimitOffsetGraphqlPagination(default_limit=6,
+                                                  ordering="-name")
+        filter_fields = {
+            "id": ("exact",), "name": ("icontains", "iexact"), }
 
 
 class DimensionConnection(relay.Connection):

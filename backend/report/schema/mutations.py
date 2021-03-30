@@ -1,5 +1,4 @@
 import graphene
-from graphql_relay import from_global_id
 
 from backend.report.models import Report
 from backend.report.schema.types import ReportType
@@ -16,22 +15,16 @@ class CreateReport(graphene.Mutation):
         type = graphene.String()
         date_from = graphene.types.Date()
         date_to = graphene.types.Date()
-        template_id = graphene.String()
+        template_id = graphene.ID()
 
     report = graphene.Field(ReportType)
 
-    def mutate(self, info, name, account_id, account_name, type, date_from, date_to, template_id):
-        data = get_analytics(from_global_id(template_id)[1], date_from, date_to)
-        report = Report.objects.create(
-            name=name,
-            account_id=account_id,
-            account_name=account_name,
-            type=type,
-            date_from=date_from,
-            date_to=date_to,
-            data=data,
-            owner=info.context.user
-        )
+    def mutate(self, info, name, account_id, account_name, type, date_from,
+            date_to, template_id):
+        data = get_analytics(template_id, date_from, date_to)
+        report = Report.objects.create(name=name, account_id=account_id,
+            account_name=account_name, type=type, date_from=date_from,
+            date_to=date_to, data=data, owner=info.context.user)
 
         return CreateReport(report=report)
 
@@ -52,7 +45,7 @@ class UpdateReport(graphene.Mutation):
     report = graphene.Field(ReportType)
 
     def mutate(self, info, id, **kwargs):
-        report = Report.objects.filter(id=from_global_id(id)[1])
+        report = Report.objects.filter(id=id)
         if report.exists():
             report.update(
                 **kwargs
@@ -64,12 +57,12 @@ class DeleteReport(graphene.Mutation):
     """ Delete report """
 
     class Arguments:
-        id = graphene.String()
+        id = graphene.ID()
 
     report = graphene.Field(ReportType)
 
     def mutate(self, info, id):
-        report = Report.objects.filter(id=from_global_id(id)[1])
+        report = Report.objects.filter(id=id)
         report.delete()
 
         return DeleteReport(report=report.first())

@@ -1,11 +1,12 @@
 import graphene
 from graphene import relay
-from graphene_django.filter import DjangoFilterConnectionField
-from graphql_relay import from_global_id
+from graphene_django_extras import DjangoListObjectField
 
-from backend.template.models import Chart, Dimension, Metric, Pivot, Template
-from backend.template.schema.types import (ChartConnection, ChartType, DimensionConnection, DimensionType,
-                                           MetricConnection, MetricType, PivotConnection, PivotType, TemplateNode)
+from backend.template.models import Chart, Dimension, Metric, Pivot
+from backend.template.schema.types import (
+    ChartConnection, ChartType, DimensionConnection, DimensionType,
+    MetricConnection, MetricType, PivotConnection, PivotType, TemplateListType,
+)
 
 
 class DimensionQuery:
@@ -70,12 +71,15 @@ class TemplateQuery:
     Can be filtered by template name: nameIcontains: "searchname"
 
     """
-    templates = DjangoFilterConnectionField(TemplateNode)
-    template = relay.node.Field(TemplateNode, id=graphene.String())
-
-    def resolve_template(root, info, id, **kwargs):
-        """ Retrieve certain template
-        id - must be a relay.Node id: str e.g.
-            id: "VGVtcGxhdGVOb2RlOjE="
-        """
-        return Template.objects.filter(pk=from_global_id(id)[1]).first()
+    # templates = DjangoFilterConnectionField(TemplateNode)
+    # template = relay.node.Field(TemplateNode, id=graphene.String())
+    #
+    # def resolve_template(root, info, id, **kwargs):
+    #     """ Retrieve certain template
+    #     id - must be a relay.Node id: str e.g.
+    #         id: "VGVtcGxhdGVOb2RlOjE="
+    #     """
+    #     return Template.objects.filter(pk=from_global_id(id)[1]).first()
+    templates = DjangoListObjectField(TemplateListType,
+        description='All Templates query')
+    template = TemplateListType.RetrieveField(description="Single Template")

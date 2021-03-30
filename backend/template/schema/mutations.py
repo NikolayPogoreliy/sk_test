@@ -1,8 +1,9 @@
 import graphene
-from graphql_relay import from_global_id
 
 from backend.template.models import Chart, Dimension, Metric, Pivot, Template
-from backend.template.schema.types import ChartType, DimensionType, MetricType, PivotType, TemplateType
+from backend.template.schema.types import (
+    ChartType, DimensionType, MetricType, PivotType, TemplateType,
+)
 
 
 class CreateChart(graphene.Mutation):
@@ -262,7 +263,7 @@ class UpdateTemplate(graphene.Mutation):
     """
 
     class Arguments:
-        id = graphene.String()
+        id = graphene.ID()
         name = graphene.String()
         charts = graphene.List(graphene.ID)
         ga_view_id = graphene.String()
@@ -273,7 +274,7 @@ class UpdateTemplate(graphene.Mutation):
     def mutate(self, info, id, **kwargs):
         charts = kwargs.pop('charts', None)
 
-        template = Template.objects.filter(id=from_global_id(id)[1])
+        template = Template.objects.filter(id=id)
         if template.exists():
             template.update(**kwargs)
 
@@ -290,7 +291,7 @@ class DeleteTemplate(graphene.Mutation):
     template = graphene.Field(ChartType)
 
     def mutate(self, info, id):
-        chart = Template.objects.filter(id=from_global_id(id)[1])
+        chart = Template.objects.filter(id=id)
         chart.delete()
 
         return DeleteChart(template=chart.first())

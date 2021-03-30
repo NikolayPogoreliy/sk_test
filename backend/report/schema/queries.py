@@ -18,4 +18,4 @@ class ReportExtraQuery:
     #     ReportListType,
     #     description='Single User query'
     # )
-    report = ReportListType.RetrieveField(description='Single User query')
+    report = ReportListType.RetrieveField(description='Single Report')
