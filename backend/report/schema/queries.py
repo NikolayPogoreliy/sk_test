@@ -1,19 +1,21 @@
-import graphene
-from graphene_django.filter import DjangoFilterConnectionField
-from graphql_relay import from_global_id
+import logging
 
-from backend.report.models import Report
-from backend.report.schema.types import ReportType
+from graphene_django_extras import (
+    DjangoListObjectField,
+)
+
+from backend.report.schema.types import (
+    ReportListType,
+)
+
+logger = logging.getLogger(__name__)
 
 
-class ReportQuery:
-    """ Get list of reports or single report"""
-    reports = DjangoFilterConnectionField(ReportType)
-    report = graphene.Field(ReportType, id=graphene.String())
-
-    def resolve_report(self, info, id):
-        """ Retrieve certain report """
-        report = Report.objects.filter(id=from_global_id(id)[1])
-        if report:
-            return report.first()
-        return Report.objects.none()
+class ReportExtraQuery:
+    reports = DjangoListObjectField(ReportListType,
+        description='All Reports query')
+    # report = DjangoObjectField(
+    #     ReportListType,
+    #     description='Single User query'
+    # )
+    report = ReportListType.RetrieveField(description='Single User query')

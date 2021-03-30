@@ -1,16 +1,16 @@
-from graphene import relay
-from graphene_django import DjangoObjectType
+from graphene_django_extras import DjangoListObjectType
+from graphene_django_extras.paginations import LimitOffsetGraphqlPagination
 
 from backend.report.models import Report
 
 
-class ReportType(DjangoObjectType):
+class ReportListType(DjangoListObjectType):
     class Meta:
         model = Report
-        interfaces = (relay.Node,)
-        fields = '__all__'
+        description = 'All reports'
+        pagination = LimitOffsetGraphqlPagination(default_limit=6,
+            ordering="-name")
         filter_fields = {
-            'name': ['icontains'],
-            'account_id': ['exact'],
-            'account_name': ['icontains']
-        }
+            "id": ("exact",), "name": ("icontains", "iexact"),
+            "account_name": ("icontains", "iexact"), "account_id": ("exact",),
+            "state": ("iexact",), }
